@@ -1,4 +1,4 @@
-﻿namespace Board
+﻿namespace board
 {
     internal class Position
     {
@@ -11,7 +11,7 @@
             this.column = column;
         }
 
-        public void definirValores(int row, int column)
+        public void setValues(int row, int column)
         {
             this.row = row;
             this.column = column;
