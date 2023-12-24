@@ -1,4 +1,5 @@
 ﻿using board;
+using chess;
 using System;
 using System.Runtime.ConstrainedExecution;
 
@@ -17,6 +18,7 @@ namespace Chess
                 }
                 Console.WriteLine();
             }
+            Console.WriteLine("  a b c d e f g h");
         }
 
         public static void displayPiece(Piece piece)
@@ -41,6 +43,14 @@ namespace Chess
                 }
                 Console.Write(" ");
             }
+        }
+
+        public static ChessPosition readChessPosition()
+        {
+            string s = Console.ReadLine();
+            char col = s[0];
+            int row = int.Parse(s[1] + "");
+            return new ChessPosition(col, row);
         }
     }
 }

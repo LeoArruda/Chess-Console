@@ -15,7 +15,7 @@ namespace chess
 
         public Position toPosition()
         {
-            return new Position(8-row,row-'a');
+            return new Position(8-row,column-'a');
         }
 
         public override string ToString()

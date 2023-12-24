@@ -8,15 +8,27 @@ namespace Chess
     {
         static void Main(string[] args)
         {
-            Board board = new Board(8, 8);
-            board.putPiece(new Rook(board, Color.Black), new Position(0, 0));
-            board.putPiece(new Queen(board, Color.Black), new Position(0, 3));
-            board.putPiece(new Knight(board, Color.Black), new Position(0, 6));
-            board.putPiece(new Rook(board, Color.Black), new Position(1, 3));
-            board.putPiece(new King(board, Color.Black), new Position(2, 4));
-            board.putPiece(new Pawn(board, Color.Black), new Position(3, 2));
-            board.putPiece(new Pawn(board, Color.Black), new Position(3, 7));
-            Screen.displayBoard(board);
+            try
+            {
+                ChessMatch match = new ChessMatch();
+                while (!match.hasFinished)
+                {
+                    Console.Clear();
+                    Screen.displayBoard(match.board);
+
+                    Console.WriteLine();
+                    Console.Write("Origin: ");
+                    Position origin = Screen.readChessPosition().toPosition();
+                    Console.Write("Target: ");
+                    Position target = Screen.readChessPosition().toPosition();
+
+                    match.movePiece(origin, target);
+                }
+            }
+            catch (BoardException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }
