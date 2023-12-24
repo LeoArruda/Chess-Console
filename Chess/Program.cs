@@ -16,7 +16,7 @@ namespace Chess
             board.putPiece(new King(board, Color.Black), new Position(2, 4));
             board.putPiece(new Pawn(board, Color.Black), new Position(3, 2));
             board.putPiece(new Pawn(board, Color.Black), new Position(3, 7));
-            Screen.printBoard(board);
+            Screen.displayBoard(board);
         }
     }
 }
