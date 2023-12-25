@@ -9,12 +9,37 @@ namespace Chess
     {
         public static void displayBoard(Board board)
         {
+
             for (int i = 0; i < board.rows; i++)
             {
                 Console.Write(8 - i + " ");
                 for (int j = 0; j < board.columns; j++)
                 {
                     displayPiece(board.piece(i, j));
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("  a b c d e f g h");
+        }
+        public static void displayBoard(Board board, bool[,] possiblePositions)
+        {
+            ConsoleColor originalBackground = Console.BackgroundColor;
+            ConsoleColor newBackground = ConsoleColor.DarkGray;
+            for (int i = 0; i < board.rows; i++)
+            {
+                Console.Write(8 - i + " ");
+                for (int j = 0; j < board.columns; j++)
+                {
+                    if (possiblePositions[i, j])
+                    {
+                        Console.BackgroundColor = newBackground;
+                    }
+                    else
+                    {
+                        Console.BackgroundColor = originalBackground;
+                    }
+                    displayPiece(board.piece(i, j));
+                    Console.BackgroundColor = originalBackground;
                 }
                 Console.WriteLine();
             }

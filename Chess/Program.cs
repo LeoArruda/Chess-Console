@@ -19,6 +19,10 @@ namespace Chess
                     Console.WriteLine();
                     Console.Write("Origin: ");
                     Position origin = Screen.readChessPosition().toPosition();
+                    bool[,] possiblePositions = match.board.piece(origin).possibleMoviments();
+                    Console.Clear();
+                    Screen.displayBoard(match.board,possiblePositions);
+
                     Console.Write("Target: ");
                     Position target = Screen.readChessPosition().toPosition();
 
