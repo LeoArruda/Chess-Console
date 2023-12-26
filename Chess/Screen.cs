@@ -1,12 +1,57 @@
 ﻿using board;
 using chess;
 using System;
+using System.Collections.Generic;
 using System.Runtime.ConstrainedExecution;
+using System.Text.RegularExpressions;
 
 namespace Chess
 {
     internal class Screen
     {
+        public static void displayMatch(ChessMatch match)
+        {
+            Screen.displayBoard(match.board);
+            Console.WriteLine();
+            displayCapturedPieces(match);
+            Console.WriteLine("Turn: " + match.turn);
+            if (!match.hasFinished)
+            {
+                Console.WriteLine("Waiting Player: " + match.currentPlayer);
+                if (match.check)
+                {
+                    Console.WriteLine("CHECK!");
+                }
+            }
+            else
+            {
+                Console.WriteLine("CHECKMATE!");
+                Console.WriteLine("Winner: " + match.currentPlayer);
+            }
+        }
+        public static void displayCapturedPieces(ChessMatch match)
+        {
+            Console.WriteLine("Captured Pieces:");
+            Console.Write("Whites : ");
+            displaySet(match.capturedPieces(Color.White));
+            Console.WriteLine();
+            Console.Write("Blacks : ");
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            displaySet(match.capturedPieces(Color.Black));
+            Console.ForegroundColor = aux;
+            Console.WriteLine();
+        }
+        public static void displaySet(HashSet<Piece> pieceSet)
+        {
+            Console.Write("[");
+            foreach (Piece x in pieceSet)
+            {
+                Console.Write(x + " ");
+            }
+            Console.Write("]");
+        }
+
         public static void displayBoard(Board board)
         {
 

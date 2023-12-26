@@ -16,11 +16,8 @@ namespace Chess
                     try
                     {
                         Console.Clear();
-                        Screen.displayBoard(match.board);
+                        Screen.displayMatch(match);
 
-                        Console.WriteLine();
-                        Console.WriteLine("Turn: " + match.turn);
-                        Console.WriteLine("Waiting Player: " + match.currentPlayer);
                         Console.Write("Origin: ");
                         Position origin = Screen.readChessPosition().toPosition();
                         match.verifyOrigin(origin);

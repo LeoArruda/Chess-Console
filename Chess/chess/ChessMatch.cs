@@ -10,15 +10,15 @@ namespace chess
         public int turn { get; private set; }
         public Color currentPlayer { get; private set; }
         public bool hasFinished { get; private set; }
-        public bool check {  get; private set; }
+        public bool check { get; private set; }
         public Piece enPassantVulnerable { get; private set; }
 
         private HashSet<Piece> pieces;
         private HashSet<Piece> captured;
 
-        public ChessMatch() 
+        public ChessMatch()
         {
-            board = new Board(8,8);
+            board = new Board(8, 8);
             turn = 1;
             currentPlayer = Color.White;
             hasFinished = false;
@@ -29,7 +29,7 @@ namespace chess
             putPieces();
         }
 
-        public void movePiece(Position origin, Position target) 
+        public void movePiece(Position origin, Position target)
         {
             Piece p = board.removePiece(origin);
             p.increaseAmtMovements();
@@ -44,6 +44,33 @@ namespace chess
             //return capturedPiece
         }
 
+        public HashSet<Piece> capturedPieces(Color color)
+        {
+            HashSet<Piece> aux = new HashSet<Piece>();
+            foreach (Piece x in captured)
+            {
+                if (x.color == color)
+                {
+                    aux.Add(x);
+                }
+            }
+            return aux;
+        }
+
+        public HashSet<Piece> inGamePieces(Color color)
+        {
+            HashSet<Piece> aux = new HashSet<Piece>();
+            foreach (Piece x in pieces)
+            {
+                if (x.color == color)
+                {
+                    aux.Add(x);
+                }
+            }
+            aux.ExceptWith(capturedPieces(color));
+            return aux;
+        }
+
         public void putNewPiece(char column, int row, Piece piece)
         {
             board.putPiece(piece, new ChessPosition(column, row).toPosition());
@@ -52,11 +79,11 @@ namespace chess
 
         public void verifyOrigin(Position pos)
         {
-            if ( board.piece(pos) == null)
+            if (board.piece(pos) == null)
             {
                 throw new BoardException("There's no piece in that position");
             }
-            if (currentPlayer != board.piece(pos).color) 
+            if (currentPlayer != board.piece(pos).color)
             {
                 throw new BoardException("That's not your piece!");
             }
@@ -69,7 +96,7 @@ namespace chess
 
         public void verifyTarget(Position origin, Position target)
         {
-            if ( !board.piece(origin).canMoveTo(target))
+            if (!board.piece(origin).canMoveTo(target))
             {
                 throw new BoardException("Invalid target position!");
             }
@@ -80,7 +107,7 @@ namespace chess
             if (currentPlayer == Color.White)
             {
                 currentPlayer = Color.Black;
-            } 
+            }
             else
             {
                 currentPlayer = Color.White;
