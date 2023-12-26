@@ -6,7 +6,7 @@ namespace board
     {
         public Position position { get; set; }
         public Color color { get; protected set; }
-        public int amtMoviments { get; protected set; }
+        public int amtMovements { get; protected set; }
         public Board board { get; protected set; }
 
         public Piece(Board board, Color color)
@@ -15,22 +15,22 @@ namespace board
             this.board = board;
             this.color = color;
             this.position = null;
-            this.amtMoviments = 0;
+            this.amtMovements = 0;
         }
 
-        public void increaseAmtMoviments()
+        public void increaseAmtMovements()
         {
-            amtMoviments++;
+            amtMovements++;
         }
 
-        public void decreaseAmtMoviments()
+        public void decreaseAmtMovements()
         {
-            amtMoviments--;
+            amtMovements--;
         }
 
-        public bool existsPossibleMoviments()
+        public bool existsPossibleMovements()
         {
-            bool[,] mat = possibleMoviments();
+            bool[,] mat = possibleMovements();
             for (int i = 0; i < board.rows; i++)
             {
                 for (int j = 0; j < board.columns; j++)
@@ -44,11 +44,16 @@ namespace board
             return false;
         }
 
-        public bool isPossibleMoviment(Position pos)
+        public bool canMoveTo(Position pos)
         {
-            return possibleMoviments()[pos.row, pos.column];
+            return possibleMovements()[pos.row, pos.column];
         }
 
-        public abstract bool[,] possibleMoviments();
+        public bool isPossibleMoviment(Position pos)
+        {
+            return possibleMovements()[pos.row, pos.column];
+        }
+
+        public abstract bool[,] possibleMovements();
     }
 }

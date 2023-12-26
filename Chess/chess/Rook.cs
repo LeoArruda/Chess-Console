@@ -10,7 +10,7 @@ namespace chess
             Piece p = board.piece(position);
             return p == null || p.color != color;
         }
-        public override bool[,] possibleMoviments()
+        public override bool[,] possibleMovements()
         {
             bool[,] brd = new bool[board.rows, board.columns];
             Position pos = new Position(0, 0);

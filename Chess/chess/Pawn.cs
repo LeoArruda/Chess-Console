@@ -22,7 +22,7 @@ namespace chess
         {
             return board.piece(position) == null;
         }
-        public override bool[,] possibleMoviments()
+        public override bool[,] possibleMovements()
         {
             bool[,] brd = new bool[board.rows, board.columns];
             Position pos = new Position(0, 0);

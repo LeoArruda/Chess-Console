@@ -32,13 +32,15 @@ namespace chess
         public void movePiece(Position origin, Position target) 
         {
             Piece p = board.removePiece(origin);
-            p.increaseAmtMoviments();
+            p.increaseAmtMovements();
             Piece capturedPiece = board.removePiece(target);
             board.putPiece(p, target);
             if (capturedPiece != null)
             {
                 captured.Add(capturedPiece);
             }
+            turn++;
+            changePlayer();
             //return capturedPiece
         }
 
@@ -47,6 +49,44 @@ namespace chess
             board.putPiece(piece, new ChessPosition(column, row).toPosition());
             pieces.Add(piece);
         }
+
+        public void verifyOrigin(Position pos)
+        {
+            if ( board.piece(pos) == null)
+            {
+                throw new BoardException("There's no piece in that position");
+            }
+            if (currentPlayer != board.piece(pos).color) 
+            {
+                throw new BoardException("That's not your piece!");
+            }
+            if (!board.piece(pos).existsPossibleMovements())
+            {
+                throw new BoardException("There are no possible movements to that piece");
+            }
+
+        }
+
+        public void verifyTarget(Position origin, Position target)
+        {
+            if ( !board.piece(origin).canMoveTo(target))
+            {
+                throw new BoardException("Invalid target position!");
+            }
+        }
+
+        public void changePlayer()
+        {
+            if (currentPlayer == Color.White)
+            {
+                currentPlayer = Color.Black;
+            } 
+            else
+            {
+                currentPlayer = Color.White;
+            }
+        }
+
         private void putPieces()
         {
             /*putNewPiece('a', 1, new Rook(board, Color.White));
