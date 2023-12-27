@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using board;
 
 namespace chess
@@ -29,7 +30,7 @@ namespace chess
             putPieces();
         }
 
-        public void movePiece(Position origin, Position target)
+        public Piece movePiece(Position origin, Position target)
         {
             Piece p = board.removePiece(origin);
             p.increaseAmtMovements();
@@ -39,9 +40,50 @@ namespace chess
             {
                 captured.Add(capturedPiece);
             }
-            turn++;
-            changePlayer();
-            //return capturedPiece
+            return capturedPiece;
+        }
+
+        public void chessMove(Position origin, Position target)
+        {
+            Piece capturedPiece = movePiece(origin, target);
+
+            if (isInCheck(currentPlayer))
+            {
+                undoChessMove(origin, target, capturedPiece);
+                throw new BoardException("You cannot put yourself in check!");
+            }
+
+            if (isInCheck(opponentColor(currentPlayer)))
+            {
+                check = true;
+            }
+            else
+            {
+                check = false;
+            }
+            if (isCheckmate(opponentColor(currentPlayer)))
+            {
+                hasFinished = true;
+            }
+            else
+            {
+                turn++;
+                changePlayer();
+            }
+
+        }
+
+        public void undoChessMove(Position origin, Position target, Piece capturedPiece)
+        {
+            Piece p = board.removePiece(target);
+            p.decreaseAmtMovements();
+            if (capturedPiece != null)
+            {
+                board.putPiece(capturedPiece, target);
+                captured.Remove(capturedPiece);
+            }
+            board.putPiece(p, origin);
+
         }
 
         public HashSet<Piece> capturedPieces(Color color)
@@ -112,6 +154,77 @@ namespace chess
             {
                 currentPlayer = Color.White;
             }
+        }
+
+        private Color opponentColor(Color color)
+        {
+            if (color == Color.White)
+            {
+                return Color.Black;
+            }
+            else
+            {
+                return Color.White;
+            }
+        }
+        private Piece king(Color color)
+        {
+            foreach (Piece x in inGamePieces(color))
+            {
+                if (x is King)
+                {
+                    return x;
+                }
+            }
+            return null;
+        }
+        public bool isInCheck(Color color)
+        {
+            Piece K = king(color);
+            if (K == null)
+            {
+                throw new BoardException("Não tem rei da cor " + color + " no tabuleiro!");
+            }
+            foreach (Piece x in inGamePieces(opponentColor(color)))
+            {
+                bool[,] brd = x.possibleMovements();
+                if (brd[K.position.row, K.position.column])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool isCheckmate(Color color)
+        {
+            if (!isInCheck(color))
+            {
+                return false;
+            }
+            foreach (Piece x in inGamePieces(color))
+            {
+                bool[,] brd = x.possibleMovements();
+                for (int i = 0; i < board.rows; i++)
+                {
+                    for (int j = 0; j < board.rows; j++)
+                    {
+                        if (brd[i, j])
+                        {
+                            Position origin = x.position;
+                            Position target = new Position(i, j);
+                            Piece capturedPiece = movePiece(origin, target);
+                            bool checkTest = isInCheck(color);
+                            undoChessMove(origin, target, capturedPiece);
+                            if (!checkTest)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
         }
 
         private void putPieces()

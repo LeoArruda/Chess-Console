@@ -23,6 +23,7 @@ namespace Chess
                         match.verifyOrigin(origin);
 
                         bool[,] possiblePositions = match.board.piece(origin).possibleMovements();
+                        
                         Console.Clear();
                         Screen.displayBoard(match.board, possiblePositions);
 
@@ -30,7 +31,7 @@ namespace Chess
                         Position target = Screen.readChessPosition().toPosition();
                         match.verifyTarget(origin, target);
 
-                        match.movePiece(origin, target);
+                        match.chessMove(origin, target);
                     }
                     catch (BoardException e)
                     {
