@@ -138,7 +138,7 @@ namespace chess
 
         public void verifyTarget(Position origin, Position target)
         {
-            if (!board.piece(origin).canMoveTo(target))
+            if (!board.piece(origin).possibleMovement(target))
             {
                 throw new BoardException("Invalid target position!");
             }
