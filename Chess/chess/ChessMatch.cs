@@ -40,6 +40,24 @@ namespace chess
             {
                 captured.Add(capturedPiece);
             }
+            // Special move small Castling
+            if (p is King && target.column == origin.column + 2)
+            {
+                Position originHook = new Position(origin.row, origin.column + 3);
+                Position targetHook = new Position(origin.row, origin.column + 1);
+                Piece H = board.removePiece(originHook);
+                H.increaseAmtMovements();
+                board.putPiece(H, targetHook);
+            }
+            // Special big small Castling
+            if (p is King && target.column == origin.column - 2)
+            {
+                Position originHook = new Position(origin.row, origin.column -4);
+                Position targetHook = new Position(origin.row, origin.column - 1);
+                Piece H = board.removePiece(originHook);
+                H.increaseAmtMovements();
+                board.putPiece(H, targetHook);
+            }
             return capturedPiece;
         }
 
@@ -83,6 +101,25 @@ namespace chess
                 captured.Remove(capturedPiece);
             }
             board.putPiece(p, origin);
+
+            // Special move small Castling
+            if (p is King && target.column == origin.column + 2)
+            {
+                Position originHook = new Position(origin.row, origin.column + 3);
+                Position targetHook = new Position(origin.row, origin.column + 1);
+                Piece H = board.removePiece(targetHook);
+                H.decreaseAmtMovements();
+                board.putPiece(H, originHook);
+            }
+            // Special big small Castling
+            if (p is King && target.column == origin.column - 2)
+            {
+                Position originHook = new Position(origin.row, origin.column - 4);
+                Position targetHook = new Position(origin.row, origin.column - 1);
+                Piece H = board.removePiece(targetHook);
+                H.decreaseAmtMovements();
+                board.putPiece(H, originHook);
+            }
 
         }
 
@@ -233,7 +270,7 @@ namespace chess
             putNewPiece('b', 1, new Knight(board, Color.White));*/
             putNewPiece('c', 1, new Bishop(board, Color.White));
             putNewPiece('d', 1, new Queen(board, Color.White));
-            putNewPiece('e', 1, new King(board, Color.White));
+            putNewPiece('e', 1, new King(board, Color.White, this));
             putNewPiece('f', 1, new Bishop(board, Color.White));
             /*putNewPiece('g', 1, new Knight(board, Color.White));*/
             putNewPiece('h', 1, new Rook(board, Color.White));
@@ -250,7 +287,7 @@ namespace chess
             putNewPiece('b', 8, new Knight(board, Color.Black));
             putNewPiece('c', 8, new Bishop(board, Color.Black));
             putNewPiece('d', 8, new Queen(board, Color.Black));
-            putNewPiece('e', 8, new King(board, Color.Black));
+            putNewPiece('e', 8, new King(board, Color.Black, this));
             putNewPiece('f', 8, new Bishop(board, Color.Black));
             putNewPiece('g', 8, new Knight(board, Color.Black));
             /*putNewPiece('h', 8, new Rook(board, Color.Black));
