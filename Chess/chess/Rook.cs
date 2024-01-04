@@ -1,5 +1,6 @@
 ﻿using board;
 using System;
+using System.Linq.Expressions;
 namespace chess
 {
     internal class Rook : Piece
@@ -67,7 +68,18 @@ namespace chess
         }
         public override string ToString()
         {
-            return "R";
+            if (this.color == Color.White)
+            {
+                return "\u2656";
+            }
+            else
+            {
+                return "\u265C";
+            }
+
+            //return "R";
         }
     }
 }
+
+
