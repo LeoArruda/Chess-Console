@@ -58,6 +58,24 @@ namespace chess
                 H.increaseAmtMovements();
                 board.putPiece(H, targetHook);
             }
+            // Special Move en Passant
+            if (p is Pawn)
+            {
+                if (origin.column != target.column && capturedPiece == null)
+                {
+                    Position posP;
+                    if (p.color == Color.White)
+                    {
+                        posP = new Position(target.row + 1, target.column);
+                    }
+                    else
+                    {
+                        posP = new Position(target.row - 1, target.column);
+                    }
+                    capturedPiece = board.removePiece(posP);
+                    captured.Add(capturedPiece);
+                }
+            }
             return capturedPiece;
         }
 
@@ -69,6 +87,21 @@ namespace chess
             {
                 undoChessMove(origin, target, capturedPiece);
                 throw new BoardException("You cannot put yourself in check!");
+            }
+
+            Piece p = board.piece(target);
+
+            // Special Move Promotion
+            if (p is Pawn)
+            {
+                if ((p.color == Color.White && target.row ==0) || (p.color == Color.Black && target.row ==7))
+                {
+                    p = board.removePiece(target);
+                    pieces.Remove(p);
+                    Piece queen = new Queen(board, p.color);
+                    board.putPiece(queen, target);
+                    pieces.Add(queen);
+                }
             }
 
             if (isInCheck(opponentColor(currentPlayer)))
@@ -87,6 +120,16 @@ namespace chess
             {
                 turn++;
                 changePlayer();
+            }
+
+            // Special Move En Passant
+            if (p is Pawn && (target.row == origin.row -2 || target.row == origin.row + 2))
+            {
+                enPassantVulnerable = p;
+            }
+            else
+            {
+                enPassantVulnerable = null;
             }
 
         }
@@ -119,6 +162,24 @@ namespace chess
                 Piece H = board.removePiece(targetHook);
                 H.decreaseAmtMovements();
                 board.putPiece(H, originHook);
+            }
+            // Special Move En Passant
+            if (p is Pawn)
+            {
+                if (origin.column != target.column && capturedPiece == enPassantVulnerable)
+                {
+                    Piece pawn = board.removePiece(target);
+                    Position posP;
+                    if (p.color == Color.White)
+                    {
+                        posP = new Position(3, target.column);
+                    }
+                    else
+                    {
+                        posP = new Position(4, target.column);
+                    }
+                    board.putPiece(pawn, posP);
+                }
             }
 
         }

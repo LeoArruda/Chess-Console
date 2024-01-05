@@ -80,27 +80,33 @@ namespace chess
             // special moves
             if (amtMovements == 0 && !match.check)
             {
-                // Small Castling
+                // Small Castling -- error before here
                 Position pos1 = new Position(pos.row, pos.column + 3);
-                if (testRookForCastling(pos1))
+                if (board.isValidPosition(pos1) && canMove(pos1))
                 {
-                    Position p1 = new Position(pos.row, pos.column + 1);
-                    Position p2 = new Position(pos.row, pos.column + 2);
-                    if (board.piece(p1) == null && board.piece(p2) == null)
+                    if (testRookForCastling(pos1))
                     {
-                        brd[pos.row, pos.column + 2] = true;
+                        Position p1 = new Position(pos.row, pos.column + 1);
+                        Position p2 = new Position(pos.row, pos.column + 2);
+                        if (board.piece(p1) == null && board.piece(p2) == null)
+                        {
+                            brd[pos.row, pos.column + 2] = true;
+                        }
                     }
                 }
                 // Big Castling
                 Position pos2 = new Position(pos.row, pos.column - 4);
-                if (testRookForCastling(pos1))
+                if (board.isValidPosition(pos2) && canMove(pos2))
                 {
-                    Position p1 = new Position(pos.row, pos.column - 1);
-                    Position p2 = new Position(pos.row, pos.column - 2);
-                    Position p3 = new Position(pos.row, pos.column - 3);
-                    if (board.piece(p1) == null && board.piece(p2) == null&& board.piece(p3)==null)
+                    if (testRookForCastling(pos2))
                     {
-                        brd[pos.row, pos.column - 2] = true;
+                        Position p1 = new Position(pos.row, pos.column - 1);
+                        Position p2 = new Position(pos.row, pos.column - 2);
+                        Position p3 = new Position(pos.row, pos.column - 3);
+                        if (board.piece(p1) == null && board.piece(p2) == null && board.piece(p3) == null)
+                        {
+                            brd[pos.row, pos.column - 2] = true;
+                        }
                     }
                 }
 
