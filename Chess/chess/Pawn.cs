@@ -8,15 +8,10 @@ namespace chess
         {
             this.match = match;
         }
-        private bool canMove(Position position)
-        {
-            Piece p = board.piece(position);
-            return p == null || p.color != color;
-        }
         private bool hasEnemy(Position position)
         {
             Piece p = board.piece(position);
-            return p != null || p.color != color;
+            return p != null && p.color != color;
         }
         private bool isFree(Position position)
         {
@@ -57,6 +52,21 @@ namespace chess
                 {
                     brd[pos.row, pos.column] = true;
                 }
+
+                // #jogadaespecial en passant
+                if (position.row == 3)
+                {
+                    Position left = new Position(position.row, position.column - 1);
+                    if (board.isValidPosition(left) && hasEnemy(left) && board.piece(left) == match.enPassantVulnerable)
+                    {
+                        brd[left.row - 1, left.column] = true;
+                    }
+                    Position right = new Position(position.row, position.column + 1);
+                    if (board.isValidPosition(right) && hasEnemy(right) && board.piece(right) == match.enPassantVulnerable)
+                    {
+                        brd[right.row - 1, right.column] = true;
+                    }
+                }
             }
             else
             {
@@ -90,20 +100,19 @@ namespace chess
                 }
 
                 // En Passant Special Move
-                /*
                 if (position.row == 4)
                 {
                     Position left = new Position(position.row, position.column - 1);
-                    if (board.isValidPosition(pos) && hasEnemy(pos) && board.piece(left) == "EnPassant")
+                    if (board.isValidPosition(pos) && hasEnemy(pos) && board.piece(left) == match.enPassantVulnerable)
                     {
-                        brd[pos.row+1, left.column] = true;
+                        brd[pos.row + 1, left.column] = true;
                     }
                     Position right = new Position(position.row, position.column + 1);
-                    if (board.isValidPosition(pos) && hasEnemy(pos) && board.piece(left) == "EnPassant")
+                    if (board.isValidPosition(pos) && hasEnemy(pos) && board.piece(right) == match.enPassantVulnerable)
                     {
-                        brd[pos.row+1, right.column] = true;
+                        brd[pos.row + 1, right.column] = true;
                     }
-                }*/
+                }
             }
             return brd;
         }

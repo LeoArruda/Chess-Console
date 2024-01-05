@@ -335,8 +335,8 @@ namespace chess
             putNewPiece('f', 1, new Bishop(board, Color.White));
             /*putNewPiece('g', 1, new Knight(board, Color.White));*/
             putNewPiece('h', 1, new Rook(board, Color.White));
-            /*putNewPiece('a', 2, new Pawn(board, Color.White));
-            putNewPiece('b', 2, new Pawn(board, Color.White));
+            putNewPiece('a', 2, new Pawn(board, Color.White, this));
+            /*putNewPiece('b', 2, new Pawn(board, Color.White));
             putNewPiece('c', 2, new Pawn(board, Color.White));
             putNewPiece('d', 2, new Pawn(board, Color.White));
             putNewPiece('e', 2, new Pawn(board, Color.White));
